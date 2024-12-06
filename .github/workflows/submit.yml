@@ -41,9 +41,9 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          sudo yum update -y
-          sudo yum install -y java-1.8.0-openjdk-devel gcc gcc-c++ libXrandr-devel libXtst-devel cups-devel alsa-lib-devel
-          sudo alternatives --install /usr/bin/gcc gcc /usr/bin/gcc 100 --slave /usr/bin/g++ g++ /usr/bin/g++
+          yum update -y
+          yum install -y java-1.8.0-openjdk-devel gcc gcc-c++ libXrandr-devel libXtst-devel cups-devel alsa-lib-devel
+          alternatives --install /usr/bin/gcc gcc /usr/bin/gcc 100 --slave /usr/bin/g++ g++ /usr/bin/g++
 
       - name: Configure
         run: >
