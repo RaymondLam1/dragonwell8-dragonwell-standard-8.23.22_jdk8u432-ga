@@ -39,34 +39,11 @@ jobs:
       JDK_VERSION: 1.8.0
 
     steps:
-#      - name: Checkout the source
-#        uses: actions/checkout@v4
-#        with:
-#          path: jdk
-#
-#      - name: Restore jtreg artifact
-#        id: jtreg_restore
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: transient_jtreg_${{ needs.prerequisites.outputs.bundle_id }}
-#          path: ~/jtreg/
-#        continue-on-error: true
-#
-#      - name: Restore jtreg artifact (retry)
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: transient_jtreg_${{ needs.prerequisites.outputs.bundle_id }}
-#          path: ~/jtreg/
-#        if: steps.jtreg_restore.outcome == 'failure'
-#
-#      - name: Fix jtreg permissions
-#        run: chmod -R a+rx ${HOME}/jtreg/
-
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install openjdk-8-jdk gcc-9 g++-9 libxrandr-dev libxtst-dev libcups2-dev libasound2-dev
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 100 --slave /usr/bin/g++ g++ /usr/bin/g++-9
+          sudo yum update -y
+          sudo yum install -y java-1.8.0-openjdk-devel gcc gcc-c++ libXrandr-devel libXtst-devel cups-devel alsa-lib-devel
+          sudo alternatives --install /usr/bin/gcc gcc /usr/bin/gcc 100 --slave /usr/bin/g++ g++ /usr/bin/g++
 
       - name: Configure
         run: >
@@ -75,7 +52,6 @@ jobs:
           ${{ matrix.flags }}
           --with-user-release-suffix=${GITHUB_ACTOR}-${GITHUB_SHA}
           --with-build-number=b00
-          --with-jtreg=${HOME}/jtreg
           --with-zlib=bundled
         working-directory: jdk
 
@@ -87,11 +63,4 @@ jobs:
         run: |
           tar -czf jdk-${{ env.JDK_VERSION }}-internal+0_linux-x64_bin${{ matrix.artifact }}.tar.gz -C jdk/build/linux-x64/images j2sdk-image
 
-#      - name: Persist test bundles
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: transient_jdk-linux-x64${{ matrix.artifact }}_${{ needs.prerequisites.outputs.bundle_id }}
-#          path: |
-#            jdk-${{ env.JDK_VERSION }}-internal+0_linux-x64_bin${{ matrix.artifact }}.tar.gz
-#
 
