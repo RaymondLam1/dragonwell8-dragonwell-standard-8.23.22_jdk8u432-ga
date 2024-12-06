@@ -39,6 +39,10 @@ jobs:
       JDK_VERSION: 1.8.0
 
     steps:
+      - name: Checkout the source
+        uses: actions/checkout@v4
+        with:
+          path: jdk
       - name: update yum
         run: |
           mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
