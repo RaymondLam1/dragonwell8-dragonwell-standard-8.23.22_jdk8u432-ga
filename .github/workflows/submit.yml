@@ -39,6 +39,14 @@ jobs:
       JDK_VERSION: 1.8.0
 
     steps:
+      - name: update yum
+        run: |
+          mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+          curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+          yum clean all && yum makecache && yum -y update && yum -y install \
+              vim \
+              wget \
+              curl
       - name: Install dependencies
         run: |
           yum update -y
